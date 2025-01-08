@@ -16,7 +16,16 @@ abstract class Button implements ButtonInterface
   public string $classname = '';
   public array $data = [];
 
-  public function export(array $attrs = [], string $innerContent = ''): array
+  public function export(array $attrs = []): array
+  {
+    return [
+      'name' => $this->name,
+      'type' => $this->type,
+      'attrs' => $this->getAttributes($attrs),
+    ];
+  }
+
+  public function getAttributes(array $attrs = []): array
   {
     if (empty($attrs['class'])) {
       $attrs['class'] = [];
@@ -28,12 +37,9 @@ abstract class Button implements ButtonInterface
       $attrs['data-' . $key] = $value;
     }
 
-    return [
-      'name' => $this->name,
-      'type' => $this->type,
-      'attrs' => $attrs,
-      'inner' => $innerContent,
-    ];
+    $attrs['class'] = implode(' ', $attrs['class']);
+
+    return $attrs;
   }
 
   public function setDataAttribute(string $key, string $value)
